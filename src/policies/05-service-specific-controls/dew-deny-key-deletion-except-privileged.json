@@ -1,0 +1,22 @@
+{
+  "Version": "5.0",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": [
+        "kms:cmk:scheduleKeyDeletion",
+        "kms:cmk:deleteMaterial",
+        "kms:cmk:disable"
+      ],
+      "Resource": [
+        "kms:*:*:KeyId:*"
+      ],
+      "Condition": {
+        "StringNotMatch": {
+          "g:PrincipalUrn": "iam::*:agency:<PRIVILEGED_AGENCY>"
+        }
+      }
+    }
+  ],
+  "_hc_note": "IAM 5.0 身份策略示例：Version 固定为 5.0，Action 采用「服务名:资源类型:操作」三段式，Resource 采用数组格式，条件键与运算符按官方授权参考校准；密钥删除动作精确到 kms:cmk:scheduleKeyDeletion / deleteMaterial / disable；KMS 授权项补齐 KeyId 资源 URN；_hc_note 为仓库说明字段，附加到 IAM 前请删除，所有占位符需替换为实际值。"
+}

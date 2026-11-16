@@ -1,0 +1,3 @@
+region         = "cn-north-4"
+project_name   = "sec-policy"
+trusted_domain = "trusted.example.com"

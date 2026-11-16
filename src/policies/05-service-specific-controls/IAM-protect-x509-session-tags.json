@@ -1,0 +1,45 @@
+{
+  "Version": "5.0",
+  "Statement": [
+    {
+      "Sid": "EnforceOnlyServicePrincipalsAndRolesAssumedByCredentialsCanSetSessionTags",
+      "Effect": "Deny",
+      "Action": [
+        "sts::tagSession"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringMatch": {
+          "g:TagKeys": [
+            "x509Issuer*",
+            "x509Subject*",
+            "x509SAN*"
+          ]
+        },
+        "BoolIfExists": {
+          "g:PrincipalIsService": "false"
+        },
+        "Null": {
+          "g:PrincipalTag/x509Subject/OU": "true",
+          "g:PrincipalTag/x509Subject/CN": "true",
+          "g:PrincipalTag/x509Subject/O": "true",
+          "g:PrincipalTag/x509Subject/C": "true",
+          "g:PrincipalTag/x509Subject/ST": "true",
+          "g:PrincipalTag/x509Subject/L": "true",
+          "g:PrincipalTag/x509Issuer/C": "true",
+          "g:PrincipalTag/x509Issuer/O": "true",
+          "g:PrincipalTag/x509Issuer/OU": "true",
+          "g:PrincipalTag/x509Issuer/ST": "true",
+          "g:PrincipalTag/x509Issuer/L": "true",
+          "g:PrincipalTag/x509Issuer/CN": "true",
+          "g:PrincipalTag/x509SAN/DNS": "true",
+          "g:PrincipalTag/x509SAN/URI": "true",
+          "g:PrincipalTag/x509SAN/Name/CN": "true"
+        }
+      }
+    }
+  ],
+  "_hc_note": "IAM 5.0 身份策略示例：Version 固定为 5.0，Action 采用「服务名:资源类型:操作」三段式，Resource 采用数组格式，条件键与运算符按官方授权参考校准；_hc_note 为仓库说明字段，附加到 IAM 前请删除，所有占位符需替换为实际值。"
+}

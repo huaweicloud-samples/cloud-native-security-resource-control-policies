@@ -1,0 +1,25 @@
+{
+  "Version": "5.0",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": [
+        "obs:bucket:createBucket"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringMatch": {
+          "obs:x-obs-acl": [
+            "public-read",
+            "public-read-write",
+            "public-read-delivered",
+            "public-read-write-delivered"
+          ]
+        }
+      }
+    }
+  ],
+  "_hc_note": "IAM 5.0 身份策略示例：Version 固定为 5.0，Action 采用「服务名:资源类型:操作」三段式，Resource 采用数组格式，条件键与运算符按官方授权参考校准；OBS 无 bucket-owner-enforced 开关，改为禁止新桶携带公开 ACL 取值；obs:x-obs-acl 取值按官方服务级条件键说明列出；_hc_note 为仓库说明字段，附加到 IAM 前请删除，所有占位符需替换为实际值。"
+}
