@@ -1,0 +1,38 @@
+{
+  "Version": "5.0",
+  "Statement": [
+    {
+      "Sid": "DenyRemovingPublicAccessBlock",
+      "Effect": "Deny",
+      "Action": [
+        "obs:bucket:deleteBucketPublicAccessBlock"
+      ],
+      "Resource": [
+        "obs:*:*:bucket:*"
+      ]
+    },
+    {
+      "Sid": "DenyPublicAclOnBucketAndObject",
+      "Effect": "Deny",
+      "Action": [
+        "obs:bucket:putBucketAcl",
+        "obs:object:putObjectAcl"
+      ],
+      "Resource": [
+        "obs:*:*:bucket:*",
+        "obs:*:*:object:*/*"
+      ],
+      "Condition": {
+        "StringMatch": {
+          "obs:x-obs-acl": [
+            "public-read",
+            "public-read-write",
+            "public-read-delivered",
+            "public-read-write-delivered"
+          ]
+        }
+      }
+    }
+  ],
+  "_hc_note": "IAM 5.0 身份策略示例：Version 固定为 5.0，Action 采用「服务名:资源类型:操作」三段式，Resource 采用数组格式，条件键与运算符按官方授权参考校准；桶级公开防护改为「禁止移除公共访问阻断 + 禁止写入公开 ACL」两条语句；_hc_note 为仓库说明字段，附加到 IAM 前请删除，所有占位符需替换为实际值。"
+}

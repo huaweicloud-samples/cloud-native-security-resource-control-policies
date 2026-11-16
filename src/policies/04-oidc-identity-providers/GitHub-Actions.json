@@ -1,0 +1,28 @@
+{
+  "Version": "5.0",
+  "Statement": [
+    {
+      "Sid": "DenyUntrustedOIDCIssuerAndSubject",
+      "Effect": "Deny",
+      "Action": [
+        "sts:agencies:assumeWithOIDC"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringNotEqualsIfExists": {
+          "oidc:iss": "<TRUSTED_ISSUER_URL>"
+        },
+        "StringNotMatch": {
+          "oidc:sub": "repo:<ORG_NAME>/*"
+        },
+        "Null": {
+          "oidc:sub": "false",
+          "oidc:iss": "false"
+        }
+      }
+    }
+  ],
+  "_hc_note": "IAM 5.0 身份策略示例：Version 固定为 5.0，Action 采用「服务名:资源类型:操作」三段式，Resource 采用数组格式，条件键与运算符按官方授权参考校准；联邦身份条件改用官方 oidc:iss / oidc:sub 条件键，并按签发方与主体双重限定；_hc_note 为仓库说明字段，附加到 IAM 前请删除，所有占位符需替换为实际值。"
+}

@@ -1,0 +1,70 @@
+{
+  "Version": "5.0",
+  "Statement": [
+    {
+      "Sid": "DenyUntrustedOIDCIssuer",
+      "Effect": "Deny",
+      "Action": [
+        "sts:agencies:assumeWithOIDC"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringNotEqualsIfExists": {
+          "oidc:iss": [
+            "<TRUSTED_ISSUER_URL_A>",
+            "<TRUSTED_ISSUER_URL_B>"
+          ]
+        },
+        "Null": {
+          "oidc:iss": "false"
+        }
+      }
+    },
+    {
+      "Sid": "DenyUntrustedOIDCSubject",
+      "Effect": "Deny",
+      "Action": [
+        "sts:agencies:assumeWithOIDC"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringNotMatch": {
+          "oidc:sub": [
+            "organization:<ORG_NAME>:*",
+            "project_path:<GROUP_NAME>/*",
+            "repo:<ORG_NAME>/*"
+          ]
+        },
+        "Null": {
+          "oidc:sub": "false"
+        }
+      }
+    },
+    {
+      "Sid": "DenyUntrustedOIDCAudience",
+      "Effect": "Deny",
+      "Action": [
+        "sts:agencies:assumeWithOIDC"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringNotEqualsIfExists": {
+          "oidc:aud": [
+            "<AUDIENCE_A>",
+            "<AUDIENCE_B>"
+          ]
+        },
+        "Null": {
+          "oidc:aud": "false"
+        }
+      }
+    }
+  ],
+  "_hc_note": "IAM 5.0 身份策略示例：Version 固定为 5.0，Action 采用「服务名:资源类型:操作」三段式，Resource 采用数组格式，条件键与运算符按官方授权参考校准；收敛为签发方 / 主体 / 受众三类白名单语句，去除重复条目；联邦身份条件改用官方 oidc:iss / oidc:sub / oidc:aud 条件键；示例库统一为 Deny 语句，去掉与防护目标相反的 Allow 语句；_hc_note 为仓库说明字段，附加到 IAM 前请删除，所有占位符需替换为实际值。"
+}

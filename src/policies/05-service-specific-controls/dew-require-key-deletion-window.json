@@ -1,0 +1,20 @@
+{
+  "Version": "5.0",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": [
+        "kms:cmk:scheduleKeyDeletion"
+      ],
+      "Resource": [
+        "kms:*:*:KeyId:*"
+      ],
+      "Condition": {
+        "NumberLessThan": {
+          "kms:ScheduleKeyDeletionPendingWindowInDays": "30"
+        }
+      }
+    }
+  ],
+  "_hc_note": "IAM 5.0 身份策略示例：Version 固定为 5.0，Action 采用「服务名:资源类型:操作」三段式，Resource 采用数组格式，条件键与运算符按官方授权参考校准；华为云 DEW 无「密钥策略安全锁定检查」开关，改以删除等待期约束实现删除防护；配套措施见分类说明：密钥策略限制删除主体 + 开启 CTS 密钥操作审计；_hc_note 为仓库说明字段，附加到 IAM 前请删除，所有占位符需替换为实际值。"
+}
